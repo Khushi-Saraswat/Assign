@@ -75,7 +75,7 @@ elasticsearchOperations.save(courses);
 * Verify data via:
 
 ```bash
-curl http://localhost:9200/courses/_search
+   System.out.println("Data inserted successfully");
 ```
 
 ---
