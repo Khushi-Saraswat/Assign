@@ -155,56 +155,7 @@ Sample Response:
   * Exact filters (`category`, `type`)
   * Sorting and pagination
 
----
 
-## Step-by-Step Setup & Run
-
-1. **Clone Repository**
-
-```bash
-git clone <your-repo-link>
-cd <repo-folder>
-```
-
-2. **Start Elasticsearch**
-
-```bash
-docker compose up -d
-```
-
-3. **Verify Elasticsearch**
-
-```bash
-curl http://localhost:9200
-```
-
-* You should see cluster information returned.
-
-4. **Run Spring Boot Application**
-
-```bash
-mvn spring-boot:run
-```
-
-* Application reads `sample-courses.json` and indexes all courses into Elasticsearch automatically.
-
-5. **Verify Indexed Data**
-
-```bash
-curl http://localhost:9200/courses/_search
-```
-
-6. **Call Search API**
-
-* Example:
-
-```bash
-curl "http://localhost:8080/api/search?q=Physics&minAge=10&maxAge=15&sort=priceAsc&page=0&size=5"
-```
-
-* Response will include filtered, paginated, and sorted course results.
-
----
 
 
 
