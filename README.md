@@ -1,30 +1,43 @@
+📘 Spring Boot + Elasticsearch Course Search
+🚀 Overview
 
+This project demonstrates a Spring Boot application that indexes course documents into Elasticsearch and exposes a REST API to search courses with multiple filters, pagination, and sorting.
 
-# Spring Boot Elasticsearch Course Search
+⚡ Note: Assignment B (Autocomplete & fuzzy suggestions) is skipped.
 
-## Overview
+📚 References & Learning Resources
 
-This project demonstrates a **Spring Boot application** that indexes course documents into **Elasticsearch** and exposes a REST API to search courses with multiple filters, pagination, and sorting.
+📄 Medium Article: Exploring Elasticsearch 8 with Spring Boot
 
-> Note: Assignment B (Autocomplete & fuzzy suggestions) is skipped.
+🎥 YouTube Tutorial: Elasticsearch Query DSL
 
----
+🤖 ChatGPT was used to understand Elasticsearch concepts and help implement the Criteria API solution.
 
-## References
+⚡ Problem Faced & Solution
+❌ Problem
 
-* Medium article explaining Elasticsearch with Spring Boot: [Exploring Elasticsearch 8 with Spring Boot](https://medium.com/@truongbui95/exploring-elasticsearch-8-utilizing-spring-boot-3-and-spring-data-elasticsearch-5-495650115197)
-* YouTube tutorial on Query DSL: [Elasticsearch Query DSL](https://www.youtube.com/watch?v=BZQOFch1ejI)
+At first, I tried implementing Query DSL (QueryBuilders.boolQuery(), rangeQuery(), etc.) inspired by the YouTube tutorial.
+However, due to version mismatch between Spring Boot 3.x, Spring Data Elasticsearch 5.x, and Elasticsearch 8.x, I kept running into dependency errors and incompatibility issues.
 
-  * ⚠️ Due to **version mismatch issues**, Query DSL could not be used directly. Instead, **Criteria API** was implemented for search functionality.
-* ChatGPT was used to understand Elasticsearch concepts and implement the **Criteria API solution**.
+✅ Solution
 
----
+I switched to Criteria API, which is supported in the latest Spring Boot 3 + Elasticsearch 8 stack.
+This approach worked smoothly and allowed me to build:
 
-## Part 1: Elasticsearch Setup
+🔎 Multi-field search (title + description)
 
-1. Create a `docker-compose.yml` for a single-node Elasticsearch cluster:
+📊 Range filters (age, price, date)
 
-```yaml
+🎯 Exact filters (category, type)
+
+↕ Sorting and 📄 Pagination
+
+👉 This change made the application stable and future-proof while still fulfilling all functional requirements.
+
+🛠 Part 1: Elasticsearch Setup
+
+Create a docker-compose.yml to run a single-node Elasticsearch cluster:
+
 version: '3.8'
 services:
   elasticsearch:
@@ -41,122 +54,87 @@ services:
 volumes:
   esdata:
     driver: local
-```
 
-2. Start Elasticsearch:
 
-```bash
+Start Elasticsearch:
+
 docker compose up -d
-```
 
-3. Verify Elasticsearch is running:
 
-```bash
+Verify Elasticsearch is running:
+
 curl http://localhost:9200
-```
 
----
 
-## Part 2: Sample Data
+✅ If successful, you’ll see cluster details (name, UUID, version).
 
-* File: `src/main/resources/sample-courses.json`
-* Contains 50+ course objects with fields:
+📂 Part 2: Sample Data
 
-  * `id`, `title`, `description`, `category`, `type`, `gradeRange`, `minAge`, `maxAge`, `price`, `nextSessionDate`
+Location: src/main/resources/sample-courses.json
 
-### Bulk Indexing
+Contains 50+ course objects with fields:
+id, title, description, category, type, gradeRange, minAge, maxAge, price, nextSessionDate
 
-* On application startup, courses are read from JSON and saved into Elasticsearch (`courses` index) using **ElasticsearchOperations**:
+📥 Bulk Indexing on Startup
 
-```java
+On application startup, courses are read from the JSON file and saved into Elasticsearch’s courses index:
+
 elasticsearchOperations.save(courses);
-```
+System.out.println("Data inserted successfully");
 
-* Verify data via:
+📸 Screenshots
 
-```bash
-   System.out.println("Data inserted successfully");
-![Indexing Data](images/app.PNG)
-```
+✅ Application Start
+✅ Data Indexed into Elasticsearch
 
----
-
-## Part 3: Search API (Assignment A)
-
-### Endpoint
-
-```
+🔍 Part 3: Search API (Assignment A)
+📌 Endpoint
 GET  /api/search/search/courses
-```
 
-### Query Parameters
-
-| Parameter | Type    | Description                                             |
-| --------- | ------- | ------------------------------------------------------- |
-| q         | String  | Search keyword in title & description (fuzzy supported) |
-| minAge    | Integer | Minimum age                                             |
-| maxAge    | Integer | Maximum age                                             |
-| category  | String  | Course category                                         |
-| type      | String  | ONE\_TIME, COURSE, CLUB                                 |
-| minPrice  | Double  | Minimum price                                           |
-| maxPrice  | Double  | Maximum price                                           |
-| startDate | String  | ISO-8601 date (filter courses on/after this date)       |
-| sort      | String  | `upcoming` (default), `priceAsc`, `priceDesc`           |
-| page      | Integer | Default 0                                               |
-| size      | Integer | Default 10                                              |
-
-Example API Call
-
-Request URL:
-
+🔑 Query Parameters
+Parameter	Type	Description
+q	String	Search keyword in title & description
+minAge	Integer	Minimum age
+maxAge	Integer	Maximum age
+category	String	Course category
+type	String	ONE_TIME, COURSE, CLUB
+minPrice	Double	Minimum price
+maxPrice	Double	Maximum price
+startDate	String	ISO-8601 date (filter courses on/after this date)
+sort	String	upcoming (default), priceAsc, priceDesc
+page	Integer	Default = 0
+size	Integer	Default = 10
+📖 Example API Call
 GET http://localhost:8080/api/search/search/courses?q=Algebra&minAge=8&maxAge=12&category=Math&type=COURSE&minPrice=40&maxPrice=60&sort=nextSessionDate&page=0&size=5
 
+🔎 Explanation of Parameters
 
-Explanation of Query Parameters:
-
-q=Algebra → searches in title and description (fuzzy search enabled)
+q=Algebra → searches in title & description
 
 minAge=8 & maxAge=12 → filters courses suitable for ages 8–12
 
-category=Math → filters by the "Math" category
+category=Math → filters by category
 
-type=COURSE → filters for type "COURSE"
+type=COURSE → only courses of type COURSE
 
-minPrice=40 & maxPrice=60 → filters courses priced between 40 and 60
+minPrice=40 & maxPrice=60 → price range filter
 
-sort=nextSessionDate → sorts results by the nearest upcoming session date
+sort=nextSessionDate → sorts by upcoming date
 
 page=0 & size=5 → first page, 5 results per page
 
-Sample Response:
-
+✅ Sample Response
 [
-    {
-        "id": "1",
-        "title": "Introduction to Algebra",
-        "description": "Learn the basics of algebra, including variables, equations, and functions.",
-        "category": "Math",
-        "type": "COURSE",
-        "gradeRange": "3rd–5th",
-        "minAge": 8,
-        "maxAge": 11,
-        "price": 49.99,
-        "nextSessionDate": "2025-09-05T10:00:00Z"
-    }
+  {
+    "id": "1",
+    "title": "Introduction to Algebra",
+    "description": "Learn the basics of algebra, including variables, equations, and functions.",
+    "category": "Math",
+    "type": "COURSE",
+    "gradeRange": "3rd–5th",
+    "minAge": 8,
+    "maxAge": 11,
+    "price": 49.99,
+    "nextSessionDate": "2025-09-05T10:00:00Z"
+  }
 ]
-
-## Notes on Criteria API
-
-* Initially attempted **Query DSL** (YouTube reference), but version mismatches with Spring Data Elasticsearch caused errors.
-* Switched to **Criteria API**, which works reliably with the current Spring Boot 3 + Elasticsearch 8 setup.
-* The Criteria API supports:
-
-  * Multi-field search (`title` + `description`)
-  * Range filters (`age`, `price`, `nextSessionDate`)
-  * Exact filters (`category`, `type`)
-  * Sorting and pagination
-
-
-
-
-
