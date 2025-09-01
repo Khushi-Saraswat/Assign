@@ -1,56 +1,44 @@
-📘 Spring Boot + Elasticsearch Demo
+# 📘 Spring Boot + Elasticsearch Demo
 
-This project demonstrates how to integrate Spring Boot with Elasticsearch to perform indexing and searching of courses.
+This project demonstrates how to integrate **Spring Boot** with **Elasticsearch** to perform indexing and searching of courses.
 
-🚀 Features
+---
 
-Indexing course data into Elasticsearch
+## 🚀 Features
+- Indexing course data into Elasticsearch  
+- Searching with filters (**category, type, age range, price range, etc.**)  
+- Sorting by **session date**  
+- Pagination support  
 
-Searching with filters (category, type, age range, price range, etc.)
+---
 
-Sorting by session date
+## ⚡ Setup Instructions
 
-Pagination support
-
-⚡ Setup Instructions
-
-1.Clone the repository:
-
+### 1. Clone the repository:
+```bash
 git clone https://github.com/Khushi-Saraswat/Assign
 cd assignment
 
-
-🛠 Part 1: Elasticsearch Setup
-
-a)Create a docker-compose.yml to run a single-node Elasticsearch cluster:
-
-b)Start Elasticsearch:
-
-c)docker compose up -d
-
-
-Verify Elasticsearch is running:
-
+2. Elasticsearch Setup
+a) Create a docker-compose.yml to run a single-node Elasticsearch cluster
+b) Start Elasticsearch:
+docker compose up -d
+c) Verify Elasticsearch is running:
 curl http://localhost:9200
-
 
 ✅ If successful, you’ll see cluster details (name, UUID, version).
 
-
-
-
 📝 API Usage
-
 Example search request:
 
 http://localhost:8080/api/search/search/courses?q=Algebra&minAge=8&maxAge=12&category=Math&type=COURSE&minPrice=40&maxPrice=60&sort=nextSessionDate&page=0&size=5
+
 
 Sample Response:
 
 [
   {
     "id": "1",
-    
     "title": "Introduction to Algebra",
     "description": "Learn the basics of algebra, including variables, equations, and functions.",
     "category": "Math",
@@ -67,12 +55,11 @@ Sample Response:
 
 Faced red lines while using Query DSL (QueryBuilders.bool(), multiMatchQuery, termQuery, etc.) due to version mismatch between Spring Boot and Elasticsearch.
 
-Resolved by switching to Criteria API instead of the old Query DSL approach.
+✅ Resolved by switching to Criteria API instead of the old Query DSL approach.
+
 
 📚 References
 
-🔗 YouTube: Query DSL in Elasticsearch with Spring Boot https://www.youtube.com/watch?v=lqLCNV-Bpbo&utm_source=chatgpt.com
+🔗 YouTube: Query DSL in Elasticsearch with Spring Boot
 
-🔗 Medium: Exploring Elasticsearch 8 with Spring Boot 3 and Spring Data Elasticsearch 5 https://medium.com/@truongbui95/exploring-elasticsearch-8-utilizing-spring-boot-3-and-spring-data-elasticsearch-5-495650115197
-
-
+🔗 Medium: Exploring Elasticsearch 8 with Spring Boot 3 and Spring Data Elasticsearch 5
