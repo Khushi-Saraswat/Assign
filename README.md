@@ -1,4 +1,6 @@
 📘 Spring Boot + Elasticsearch Course Search
+
+
 🚀 Overview
 
 This project demonstrates a Spring Boot application that indexes course documents into Elasticsearch and exposes a REST API to search courses with multiple filters, pagination, and sorting.
