@@ -104,44 +104,45 @@ GET /api/search
 | page      | Integer | Default 0                                               |
 | size      | Integer | Default 10                                              |
 
-### Example Requests
+Example API Call
 
-1. Search by keyword:
+Request URL:
 
-```bash
-curl "http://localhost:8080/api/search?q=dinors"
-```
+GET http://localhost:8080/api/search/search/courses?q=Algebra&minAge=8&maxAge=12&category=Math&type=COURSE&minPrice=40&maxPrice=60&sort=nextSessionDate&page=0&size=5
 
-2. Filter by category, age, and price:
 
-```bash
-curl "http://localhost:8080/api/search?category=Math&minPrice=10&maxPrice=100&minAge=8&maxAge=12"
-```
+Explanation of Query Parameters:
 
-3. Pagination & sorting:
+q=Algebra → searches in title and description (fuzzy search enabled)
 
-```bash
-curl "http://localhost:8080/api/search?page=1&size=5&sort=priceDesc"
-```
+minAge=8 & maxAge=12 → filters courses suitable for ages 8–12
 
-### Response Example
+category=Math → filters by the "Math" category
 
-```json
-{
-  "total": 52,
-  "courses": [
+type=COURSE → filters for type "COURSE"
+
+minPrice=40 & maxPrice=60 → filters courses priced between 40 and 60
+
+sort=nextSessionDate → sorts results by the nearest upcoming session date
+
+page=0 & size=5 → first page, 5 results per page
+
+Sample Response:
+
+[
     {
-      "id": "1",
-      "title": "Introduction to Physics",
-      "category": "Science",
-      "price": 50.0,
-      "nextSessionDate": "2025-09-10T10:00:00Z"
+        "id": "1",
+        "title": "Introduction to Algebra",
+        "description": "Learn the basics of algebra, including variables, equations, and functions.",
+        "category": "Math",
+        "type": "COURSE",
+        "gradeRange": "3rd–5th",
+        "minAge": 8,
+        "maxAge": 11,
+        "price": 49.99,
+        "nextSessionDate": "2025-09-05T10:00:00Z"
     }
-  ]
-}
-```
-
----
+]
 
 ## Notes on Criteria API
 
