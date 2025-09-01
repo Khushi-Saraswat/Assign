@@ -12,6 +12,27 @@ This project demonstrates how to integrate **Spring Boot** with **Elasticsearch*
 
 ---
 
+🚧 Problem I Faced
+
+While implementing search functionality, I initially tried using Elasticsearch Query DSL directly with QueryBuilders (boolQuery, multiMatchQuery, rangeQuery, etc.).
+However, I faced issues like red lines in IntelliJ because of:
+
+Version mismatches between Spring Boot 3, Spring Data Elasticsearch 5, and Elasticsearch 8.
+
+Deprecated or removed methods in the latest dependencies.
+
+👉 To resolve this, I switched to Spring Data Criteria API for building dynamic queries, which worked smoothly and was compatible with my setup.
+
+📚 References
+
+🔗 YouTube: Query DSL in Elasticsearch with Spring Boot
+
+🔗 Medium: Exploring Elasticsearch 8 with Spring Boot 3 and Spring Data Elasticsearch 5
+
+🤖 ChatGPT: Used for guidance and troubleshooting during setup and query implementation.
+
+
+
 ## ⚡ Setup Instructions
 
 ### 1. Clone the repository:
@@ -62,15 +83,3 @@ Sample Response:
 
 
 
-⚠️ Problems Faced
-
-Faced red lines while using Query DSL (QueryBuilders.bool(), multiMatchQuery, termQuery, etc.) due to version mismatch between Spring Boot and Elasticsearch.
-
-✅ Resolved by switching to Criteria API instead of the old Query DSL approach.
-
-
-📚 References
-
-🔗 YouTube: Query DSL in Elasticsearch with Spring Boot
-
-🔗 Medium: Exploring Elasticsearch 8 with Spring Boot 3 and Spring Data Elasticsearch 5
