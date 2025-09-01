@@ -19,7 +19,40 @@ Pagination support
 git clone https://github.com/Khushi-Saraswat/Assign
 cd assignment
 
-2.Start Elasticsearch (Docker recommended). Example docker-compose.yml:
+
+🛠 Part 1: Elasticsearch Setup
+
+Create a docker-compose.yml to run a single-node Elasticsearch cluster:
+
+version: '3.8'
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.14.0
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - 9200:9200
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+
+volumes:
+  esdata:
+    driver: local
+
+
+Start Elasticsearch:
+
+docker compose up -d
+
+
+Verify Elasticsearch is running:
+
+curl http://localhost:9200
+
+
+✅ If successful, you’ll see cluster details (name, UUID, version).
 
 
 
@@ -35,6 +68,7 @@ Sample Response:
 [
   {
     "id": "1",
+    
     "title": "Introduction to Algebra",
     "description": "Learn the basics of algebra, including variables, equations, and functions.",
     "category": "Math",
