@@ -71,8 +71,8 @@ Resolved by switching to Criteria API instead of the old Query DSL approach.
 
 📚 References
 
-🔗 YouTube: Query DSL in Elasticsearch with Spring Boot
+🔗 YouTube: Query DSL in Elasticsearch with Spring Boot https://www.youtube.com/watch?v=lqLCNV-Bpbo&utm_source=chatgpt.com
 
-🔗 Medium: Exploring Elasticsearch 8 with Spring Boot 3 and Spring Data Elasticsearch 5
+🔗 Medium: Exploring Elasticsearch 8 with Spring Boot 3 and Spring Data Elasticsearch 5 https://medium.com/@truongbui95/exploring-elasticsearch-8-utilizing-spring-boot-3-and-spring-data-elasticsearch-5-495650115197
 
 
