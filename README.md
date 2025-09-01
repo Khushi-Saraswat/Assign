@@ -22,29 +22,11 @@ cd assignment
 
 🛠 Part 1: Elasticsearch Setup
 
-Create a docker-compose.yml to run a single-node Elasticsearch cluster:
+a)Create a docker-compose.yml to run a single-node Elasticsearch cluster:
 
-version: '3.8'
-services:
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.14.0
-    container_name: elasticsearch
-    environment:
-      - discovery.type=single-node
-      - ES_JAVA_OPTS=-Xms512m -Xmx512m
-    ports:
-      - 9200:9200
-    volumes:
-      - esdata:/usr/share/elasticsearch/data
+b)Start Elasticsearch:
 
-volumes:
-  esdata:
-    driver: local
-
-
-Start Elasticsearch:
-
-docker compose up -d
+c)docker compose up -d
 
 
 Verify Elasticsearch is running:
