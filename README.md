@@ -1,6 +1,4 @@
-Perfect! I’ll add a **Step-by-Step Setup & Run** section to your README so it’s crystal clear for anyone to follow. Here’s the updated README including this section:
 
----
 
 # Spring Boot Elasticsearch Course Search
 
@@ -207,7 +205,7 @@ curl "http://localhost:8080/api/search?q=Physics&minAge=10&maxAge=15&sort=priceA
 
 ---
 
-This README is now **submission-ready** and clearly explains setup, indexing, and API usage with examples.
+
 
 If you want, I can also **add a small section showing screenshots or commands for verifying data and API results**, which will make it look more professional for reviewers.
 
