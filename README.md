@@ -39,7 +39,7 @@ Deprecated or removed methods in the latest dependencies.
 ```bash
 git clone https://github.com/Khushi-Saraswat/Assign
 cd assignment
-
+```bash
 2. Elasticsearch Setup
 a) Create a docker-compose.yml to run a single-node Elasticsearch cluster
 b) Start Elasticsearch:
