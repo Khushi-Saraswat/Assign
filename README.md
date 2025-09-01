@@ -25,9 +25,9 @@ Deprecated or removed methods in the latest dependencies.
 
 📚 References
 
-🔗 YouTube: Query DSL in Elasticsearch with Spring Boot
+🔗 YouTube: Query DSL in Elasticsearch with Spring Boot (https://www.youtube.com/watch?v=lqLCNV-Bpbo&utm_source=chatgpt.com)
 
-🔗 Medium: Exploring Elasticsearch 8 with Spring Boot 3 and Spring Data Elasticsearch 5
+🔗 Medium: Exploring Elasticsearch 8 with Spring Boot 3 and Spring Data Elasticsearch 5 (https://medium.com/@truongbui95/exploring-elasticsearch-8-utilizing-spring-boot-3-and-spring-data-elasticsearch-5-495650115197)
 
 🤖 ChatGPT: Used for guidance and troubleshooting during setup and query implementation.
 
@@ -36,10 +36,10 @@ Deprecated or removed methods in the latest dependencies.
 ## ⚡ Setup Instructions
 
 ### 1. Clone the repository:
-```bash
+
 git clone https://github.com/Khushi-Saraswat/Assign
 cd assignment
-```bash
+
 2. Elasticsearch Setup
 a) Create a docker-compose.yml to run a single-node Elasticsearch cluster
 b) Start Elasticsearch:
