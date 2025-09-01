@@ -1,4 +1,4 @@
-Got it 👍 I’ll properly indent and format your README so it looks clean and professional:
+
 
 ---
 
@@ -9,11 +9,11 @@ This project demonstrates how to integrate **Spring Boot** with **Elasticsearch*
 ---
 
 ## 🚀 Features
+- Indexing course data into Elasticsearch
+-  multiple filters, pagination, and sorting 
+- Sorting by **session date**
+- Pagination support
 
-* Indexing course data into **Elasticsearch**
-* Searching with filters (**category, type, age range, price range, etc.**)
-* Sorting by **session date**
-* Pagination support
 
 ---
 
