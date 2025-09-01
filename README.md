@@ -159,6 +159,3 @@ Sample Response:
 
 
 
-If you want, I can also **add a small section showing screenshots or commands for verifying data and API results**, which will make it look more professional for reviewers.
-
-Do you want me to add that too?
