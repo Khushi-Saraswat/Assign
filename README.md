@@ -85,7 +85,7 @@ elasticsearchOperations.save(courses);
 ### Endpoint
 
 ```
-GET /api/search
+GET  /api/search/search/courses
 ```
 
 ### Query Parameters
