@@ -51,6 +51,17 @@ Sample Response:
   }
 ]
 
+
+
+
+
+
+
+
+
+
+
+
 ⚠️ Problems Faced
 
 Faced red lines while using Query DSL (QueryBuilders.bool(), multiMatchQuery, termQuery, etc.) due to version mismatch between Spring Boot and Elasticsearch.
