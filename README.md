@@ -1,103 +1,214 @@
-Course Search Application with Spring Boot & Elasticsearch
+Perfect! I’ll add a **Step-by-Step Setup & Run** section to your README so it’s crystal clear for anyone to follow. Here’s the updated README including this section:
 
-This project is a Spring Boot application that indexes a set of sample course documents into Elasticsearch and provides REST APIs to search courses with filters, pagination, and sorting.
+---
 
-Features
+# Spring Boot Elasticsearch Course Search
 
-Full-text search on course title and description
+## Overview
 
-Filters for:
+This project demonstrates a **Spring Boot application** that indexes course documents into **Elasticsearch** and exposes a REST API to search courses with multiple filters, pagination, and sorting.
 
-Category (Math, Science, Art, etc.)
+> Note: Assignment B (Autocomplete & fuzzy suggestions) is skipped.
 
-Type (ONE_TIME, COURSE, CLUB)
+---
 
-Age range (minAge/maxAge)
+## References
 
-Price range (minPrice/maxPrice)
+* Medium article explaining Elasticsearch with Spring Boot: [Exploring Elasticsearch 8 with Spring Boot](https://medium.com/@truongbui95/exploring-elasticsearch-8-utilizing-spring-boot-3-and-spring-data-elasticsearch-5-495650115197)
+* YouTube tutorial on Query DSL: [Elasticsearch Query DSL](https://www.youtube.com/watch?v=BZQOFch1ejI)
 
-Upcoming session date (nextSessionDate)
+  * ⚠️ Due to **version mismatch issues**, Query DSL could not be used directly. Instead, **Criteria API** was implemented for search functionality.
+* ChatGPT was used to understand Elasticsearch concepts and implement the **Criteria API solution**.
 
-Sorting:
+---
 
-Default: ascending by nextSessionDate
+## Part 1: Elasticsearch Setup
 
-Optional: priceAsc, priceDesc
+1. Create a `docker-compose.yml` for a single-node Elasticsearch cluster:
 
-Pagination support (page, size)
-
-
-Part 1: Elasticsearch Setup
-1. Docker Compose Configuration
-
-I set up a single-node Elasticsearch cluster using Docker Compose with version 8.14.0.
-
-1. Create a docker-compose.yml:
-
+```yaml
+version: '3.8'
 services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.14.0
     container_name: elasticsearch
     environment:
       - discovery.type=single-node
-      - xpack.security.enabled=false
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
     ports:
-      - "9200:9200"
-      - "9300:9300"
+      - 9200:9200
     volumes:
-      - elasticsearch-data:/usr/share/elasticsearch/data
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:9200"]
-      interval: 10s
-      timeout: 10s
-      retries: 5
+      - esdata:/usr/share/elasticsearch/data
 
 volumes:
-  elasticsearch-data:
+  esdata:
+    driver: local
+```
 
+2. Start Elasticsearch:
 
+```bash
+docker compose up -d
+```
 
-2. Starting Elasticsearch
+3. Verify Elasticsearch is running:
 
-Run the following command in the cmd:
-
-docker-compose up -d
-
-
-This will start Elasticsearch in detached mode.
-You can check running containers with:
-
-docker ps
-
-3. Verify Elasticsearch
-
-To ensure Elasticsearch is running and accessible on localhost:9200:
-
+```bash
 curl http://localhost:9200
+```
 
+---
 
-Expected Response:
+## Part 2: Sample Data
 
+* File: `src/main/resources/sample-courses.json`
+* Contains 50+ course objects with fields:
+
+  * `id`, `title`, `description`, `category`, `type`, `gradeRange`, `minAge`, `maxAge`, `price`, `nextSessionDate`
+
+### Bulk Indexing
+
+* On application startup, courses are read from JSON and saved into Elasticsearch (`courses` index) using **ElasticsearchOperations**:
+
+```java
+elasticsearchOperations.save(courses);
+```
+
+* Verify data via:
+
+```bash
+curl http://localhost:9200/courses/_search
+```
+
+---
+
+## Part 3: Search API (Assignment A)
+
+### Endpoint
+
+```
+GET /api/search
+```
+
+### Query Parameters
+
+| Parameter | Type    | Description                                             |
+| --------- | ------- | ------------------------------------------------------- |
+| q         | String  | Search keyword in title & description (fuzzy supported) |
+| minAge    | Integer | Minimum age                                             |
+| maxAge    | Integer | Maximum age                                             |
+| category  | String  | Course category                                         |
+| type      | String  | ONE\_TIME, COURSE, CLUB                                 |
+| minPrice  | Double  | Minimum price                                           |
+| maxPrice  | Double  | Maximum price                                           |
+| startDate | String  | ISO-8601 date (filter courses on/after this date)       |
+| sort      | String  | `upcoming` (default), `priceAsc`, `priceDesc`           |
+| page      | Integer | Default 0                                               |
+| size      | Integer | Default 10                                              |
+
+### Example Requests
+
+1. Search by keyword:
+
+```bash
+curl "http://localhost:8080/api/search?q=dinors"
+```
+
+2. Filter by category, age, and price:
+
+```bash
+curl "http://localhost:8080/api/search?category=Math&minPrice=10&maxPrice=100&minAge=8&maxAge=12"
+```
+
+3. Pagination & sorting:
+
+```bash
+curl "http://localhost:8080/api/search?page=1&size=5&sort=priceDesc"
+```
+
+### Response Example
+
+```json
 {
-  "name" : "5a1273218446",
-  "cluster_name" : "docker-cluster",
-  "cluster_uuid" : "N1o20RbmQHyRk_Yac026rQ",
-  "version" : {
-    "number" : "8.14.0",
-    "build_flavor" : "default",
-    "build_type" : "docker",
-    "build_hash" : "8d96bbe3bf5fed931f3119733895458eab75dca9",
-    "build_date" : "2024-06-03T10:05:49.073003402Z",
-    "build_snapshot" : false,
-    "lucene_version" : "9.10.0",
-    "minimum_wire_compatibility_version" : "7.17.0",
-    "minimum_index_compatibility_version" : "7.0.0"
-  },
-  "tagline" : "You Know, for Search"
+  "total": 52,
+  "courses": [
+    {
+      "id": "1",
+      "title": "Introduction to Physics",
+      "category": "Science",
+      "price": 50.0,
+      "nextSessionDate": "2025-09-10T10:00:00Z"
+    }
+  ]
 }
+```
 
+---
+
+## Notes on Criteria API
+
+* Initially attempted **Query DSL** (YouTube reference), but version mismatches with Spring Data Elasticsearch caused errors.
+* Switched to **Criteria API**, which works reliably with the current Spring Boot 3 + Elasticsearch 8 setup.
+* The Criteria API supports:
+
+  * Multi-field search (`title` + `description`)
+  * Range filters (`age`, `price`, `nextSessionDate`)
+  * Exact filters (`category`, `type`)
+  * Sorting and pagination
+
+---
+
+## Step-by-Step Setup & Run
+
+1. **Clone Repository**
+
+```bash
+git clone <your-repo-link>
+cd <repo-folder>
+```
+
+2. **Start Elasticsearch**
+
+```bash
+docker compose up -d
+```
+
+3. **Verify Elasticsearch**
+
+```bash
+curl http://localhost:9200
+```
+
+* You should see cluster information returned.
+
+4. **Run Spring Boot Application**
+
+```bash
+mvn spring-boot:run
+```
+
+* Application reads `sample-courses.json` and indexes all courses into Elasticsearch automatically.
+
+5. **Verify Indexed Data**
+
+```bash
+curl http://localhost:9200/courses/_search
+```
+
+6. **Call Search API**
+
+* Example:
+
+```bash
+curl "http://localhost:8080/api/search?q=Physics&minAge=10&maxAge=15&sort=priceAsc&page=0&size=5"
+```
+
+* Response will include filtered, paginated, and sorted course results.
+
+---
+
+This README is now **submission-ready** and clearly explains setup, indexing, and API usage with examples.
+
+If you want, I can also **add a small section showing screenshots or commands for verifying data and API results**, which will make it look more professional for reviewers.
+
+Do you want me to add that too?
