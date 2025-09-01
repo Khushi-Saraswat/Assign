@@ -76,6 +76,7 @@ elasticsearchOperations.save(courses);
 
 ```bash
    System.out.println("Data inserted successfully");
+![Indexing Data](images/app.PNG)
 ```
 
 ---
