@@ -50,6 +50,37 @@ cd assignment
 ### 2. Elasticsearch Setup
 
 a) Create a `docker-compose.yml` to run a single-node Elasticsearch cluster
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.14.0
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  elasticsearch-data:
+
+
+
+
+
 b) Start Elasticsearch:
 
 ```bash
