@@ -21,7 +21,7 @@ This project demonstrates how to integrate **Spring Boot** with **Elasticsearch*
 
 While implementing search functionality, I initially tried using **Elasticsearch Query DSL** directly with `QueryBuilders` (`boolQuery`, `multiMatchQuery`, `rangeQuery`, etc.).
 
-However, I faced issues like **red lines in IntelliJ** because of:
+However, I faced issues like **red lines in Vs Code** because of:
 
 * Version mismatches between **Spring Boot 3**, **Spring Data Elasticsearch 5**, and **Elasticsearch 8**
 * Deprecated or removed methods in the latest dependencies
